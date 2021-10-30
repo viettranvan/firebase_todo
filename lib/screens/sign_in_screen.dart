@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_todo/utils/utils.dart';
 import 'package:firebase_todo/widgets/widgets.dart';
+import 'package:firebase_todo/screens/screens.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -38,14 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 20.0),
-                FlutterLogo(size: 150),
-                const SizedBox(height: 10.0),
-                AnimatedTextKit(
-                  repeatForever: true,
-                  animatedTexts: [
-                    TyperAnimatedText("Todo App",textStyle: kAppTitle)
-                  ],
-                ),
+                Header(),
                 const SizedBox(height: 10.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -80,11 +74,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () => print("forgot password"),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed(ForgotPassword.id),
                       child: Text(
                         "Forgot password",
-                        style:
-                            TextStyle(color: Color(0xff2449e7), fontSize: 16),
+                        style: kBlueTextButton,
                       ),
                     ),
                     const SizedBox(width: 20.0)
@@ -99,7 +93,26 @@ class _SignInScreenState extends State<SignInScreen> {
                     print("on tap");
                   },
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Don't have an account?",
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 16.0),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(SignUpScreen.id);
+                          },
+                          child: Text("Sign Up", style: kBlueTextButton)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10.0),
                 Row(
                   children: [
                     Expanded(

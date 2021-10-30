@@ -18,7 +18,9 @@ class FirebaseTodo extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: SignInScreen.id,
       routes: {
-        SignInScreen.id: (context) => SignInScreen()
+        SignInScreen.id: (context) => SignInScreen(),
+        SignUpScreen.id: (context) => SignUpScreen(),
+        ForgotPassword.id: (context) => ForgotPassword()
       },
     );
   }
