@@ -20,7 +20,8 @@ class FirebaseTodo extends StatelessWidget {
       routes: {
         SignInScreen.id: (context) => SignInScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
-        ForgotPassword.id: (context) => ForgotPassword()
+        ForgotPassword.id: (context) => ForgotPassword(),
+        HomeScreen.id: (context) => HomeScreen(),
       },
     );
   }
