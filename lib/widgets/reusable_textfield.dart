@@ -11,6 +11,7 @@ class ReusableTextField extends StatelessWidget {
     required this.hintText,
     this.prefixIcon,
     this.suffixIcon,
+    this.onChange
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -21,10 +22,12 @@ class ReusableTextField extends StatelessWidget {
   final String hintText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final Function(String)? onChange;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: onChange,
       obscureText: obscureText,
       textInputAction: textInputAction,
       keyboardType: keyboardType,

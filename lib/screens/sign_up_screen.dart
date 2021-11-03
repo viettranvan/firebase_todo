@@ -4,6 +4,7 @@ import 'package:firebase_todo/utils/utils.dart';
 import 'package:firebase_todo/widgets/header.dart';
 import 'package:firebase_todo/widgets/linear_button.dart';
 import 'package:firebase_todo/widgets/reusable_textfield.dart';
+import 'package:firebase_todo/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -20,8 +21,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _reEnterPasswordController =
       TextEditingController();
+
+  bool isEmailValid = false;
+  bool isPasswordValid = false;
+  bool isPasswordMatch = false;
   bool isObscureTextPass = true;
   bool isObscureTextRePass = true;
+  bool hasUppercase = false;
+  bool hasLowercase = false;
+  bool hasNumber = false;
+  bool hasSpecialCharacter = false;
+  bool hasMinLength = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: "Please enter your email",
                     prefixIcon: Icon(Icons.email, color: Colors.blue),
                     suffixIcon: null,
-                    errorText: null,
+                    errorText: isEmailValid ? null : "Incorrect email format",
                   ),
                 ),
                 const SizedBox(height: 10.0),
@@ -84,8 +94,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: "Please enter your password",
                     prefixIcon: Icon(Icons.lock, color: Colors.blue),
                     suffixIcon: _togglePass,
-                    errorText: null,
+                    errorText: isPasswordValid ? null : "Incorrect password format",
+                    onChange: (val){
+                      setState(() {
+                        hasUppercase = val.contains(RegExp(r'[A-Z]'));
+                        hasNumber = val.contains(RegExp(r'[0-9]'));
+                        hasLowercase = val.contains(RegExp(r'[a-z]'));
+                        hasSpecialCharacter =
+                            val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+                        hasMinLength = val.length >= 6;
+                      });
+                    },
                   ),
+                ),
+                const SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CheckPasswordValidate(
+                      symbol: "A",
+                      detail: "Uppercase",
+                      condition: hasUppercase,
+                    ),
+                    CheckPasswordValidate(
+                      symbol: "a",
+                      detail: "Lowercase",
+                      condition: hasLowercase,
+                    ),
+                    CheckPasswordValidate(
+                      symbol: "1",
+                      detail: "Number",
+                      condition: hasNumber,
+                    ),
+                    CheckPasswordValidate(
+                      symbol: "@",
+                      detail: "Special",
+                      condition: hasSpecialCharacter,
+                    ),
+                    CheckPasswordValidate(
+                      symbol: "6+",
+                      detail: "Min Length",
+                      condition: hasMinLength,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10.0),
                 Padding(
@@ -98,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: "Re-Enter your password",
                     prefixIcon: Icon(Icons.lock, color: Colors.blue),
                     suffixIcon: _toggleRePass,
-                    errorText: null,
+                    errorText: isPasswordMatch ? null : "Password not match",
                   ),
                 ),
                 const SizedBox(height: 10.0),
@@ -106,9 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   color1: Color(0xff20a033),
                   color2: Color(0xff60f52e),
                   buttonTitle: "Sign Up",
-                  onTap: () {
-                    print("sign up");
-                  },
+                  onTap: () => onSignUp(context),
                 ),
                 const SizedBox(height: 10.0),
                 LinearButton(
@@ -120,6 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SignInScreen.id, (route) => false);
                   },
                 ),
+                const SizedBox(height: 10.0),
               ],
             ),
           ),
@@ -127,4 +177,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+  onSignUp(BuildContext context) {
+    Validation validation = Validation();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String rePassword = _reEnterPasswordController.text.trim();
+
+    setState(() {
+      isEmailValid = validation.isValidEmail(email);
+      isPasswordValid = validation.isValidPassword(password);
+      isPasswordMatch = password == rePassword;
+    });
+
+  }
+
 }
+
+
